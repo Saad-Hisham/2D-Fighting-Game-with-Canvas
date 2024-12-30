@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Press Start 2P", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+canvas {
+    border: 4px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100vh;
+    width: 100vw;
+
+    height: 100vh;
+}
+
+.game-states {
+    position: fixed;
+    top: 10vh;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    display: none;
+}
+
+.game-states div.p-1,.game-states div.p-2 {
+    background: #ff0000;
+    width: 41%;
+    height: 3rem;
+    margin: 6px;
+    border: 3px solid white;
+}
+
+.game-states div.p-1 div,.game-states div.p-2 div {
+    background: #a0a1d5;
+    width: 100%;
+    height: 100%;
+}
+div#winner {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    z-index: 9;
+    text-align: center;
+    display: none;
+    font-weight: bold;
+    letter-spacing: 6px;
+    font-size: 1.5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 
+                 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+div.timer {
+    background: #a0a1d5;
+    width: 8rem;
+    height: 8rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: white;
+    font-size: 2rem;
+    border: 3px solid white;
+}
+body{
+    background-image: url("./assets/1/start.png");
+    background-size: cover;
+}
