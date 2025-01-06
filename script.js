@@ -79,7 +79,7 @@ let allPlayersP1 = [
         { src: "./assets/girl-p1/jump.png", frameCount: 10, staggerFrames: 15 },
         { src: "./assets/girl-p1/Hurt.png", frameCount: 2, staggerFrames: 25 },
         { src: "./assets/girl-p1/attack_2.png", frameCount: 8, staggerFrames: 5 },
-        { src: "./assets/girl-p1/Cast.png", frameCount: 6, staggerFrames: 10 },
+        { src: "./assets/girl-p1/Cast.png", frameCount: 6, staggerFrames: 5 },
         { src: "./assets/girl-p1/Dead.png", frameCount: 5, staggerFrames: 20 },
         { src: "./assets/girl-p1/Spine.png" },
     ],
@@ -87,11 +87,11 @@ let allPlayersP1 = [
     [
         { src: "./assets/Ninja_Peasant-p1/Idle.png", frameCount: 6, staggerFrames: 10 },
         { src: "./assets/Ninja_Peasant-p1/Run.png", frameCount: 6, staggerFrames: 10 },
-        { src: "./assets/Ninja_Peasant-p1/Attack_2.png", frameCount: 4, staggerFrames: 5 },
+        { src: "./assets/Ninja_Peasant-p1/Attack_1.png", frameCount: 6, staggerFrames: 7 },
         { src: "./assets/Ninja_Peasant-p1/Jump.png", frameCount: 8, staggerFrames: 15 },
         { src: "./assets/Ninja_Peasant-p1/Hurt.png", frameCount: 2, staggerFrames: 25 },
         { src: "./assets/Ninja_Peasant-p1/Attack_2.png", frameCount: 4, staggerFrames: 5 },
-        { src: "./assets/Ninja_Peasant-p1/Shot.png", frameCount: 6, staggerFrames: 10 },
+        { src: "./assets/Ninja_Peasant-p1/Attack_1.png", frameCount: 6, staggerFrames: 10 },
         { src: "./assets/Ninja_Peasant-p1/Dead.png", frameCount: 4, staggerFrames: 20 },
         { src: "./assets/Ninja_Peasant-p1/Dart.png" },
     ],
@@ -104,11 +104,11 @@ let allPlayersP2 = [
     [
         { src: "./assets/Ninja_Peasant-p2/Idle.png", frameCount: 6, staggerFrames: 10 },
         { src: "./assets/Ninja_Peasant-p2/Run.png", frameCount: 6, staggerFrames: 10 },
-        { src: "./assets/Ninja_Peasant-p2/Attack_2.png", frameCount: 4, staggerFrames: 5 },
+        { src: "./assets/Ninja_Peasant-p2/Attack_1.png", frameCount: 6, staggerFrames: 7 },
         { src: "./assets/Ninja_Peasant-p2/Jump.png", frameCount: 8, staggerFrames: 15 },
         { src: "./assets/Ninja_Peasant-p2/Hurt.png", frameCount: 2, staggerFrames: 25 },
         { src: "./assets/Ninja_Peasant-p2/Attack_2.png", frameCount: 4, staggerFrames: 5 },
-        { src: "./assets/Ninja_Peasant-p2/Shot.png", frameCount: 6, staggerFrames: 10 },
+        { src: "./assets/Ninja_Peasant-p2/Attack_1.png", frameCount: 6, staggerFrames: 10 },
         { src: "./assets/Ninja_Peasant-p2/Dead.png", frameCount: 4, staggerFrames: 20 },
         { src: "./assets/Ninja_Peasant-p2/Dart.png" },
     ],
@@ -131,7 +131,7 @@ let allPlayersP2 = [
         { src: "./assets/girl-p2/jump.png", frameCount: 10, staggerFrames: 15 },
         { src: "./assets/girl-p2/Hurt.png", frameCount: 2, staggerFrames: 25 },
         { src: "./assets/girl-p2/attack_2.png", frameCount: 8, staggerFrames: 5 },
-        { src: "./assets/girl-p2/Cast.png", frameCount: 6, staggerFrames: 10 },
+        { src: "./assets/girl-p2/Cast.png", frameCount: 6, staggerFrames: 5 },
         { src: "./assets/girl-p2/Dead.png", frameCount: 5, staggerFrames: 20 },
         { src: "./assets/girl-p2/Spine.png" },
     ],
@@ -238,6 +238,14 @@ async function preloadAssets() {
             preloadAudio(assets.audio),
             preloadSprites(assets.sprites),
             preloadSprites(assets.sprites2),
+            preloadSprites(allPlayersP1[0]),
+            preloadSprites(allPlayersP1[1]),
+            preloadSprites(allPlayersP1[2]),
+            preloadSprites(allPlayersP2[0]),
+            preloadSprites(allPlayersP2[1]),
+            preloadSprites(allPlayersP2[2]),
+
+
 
         ]);
         assetsLoaded = true;
@@ -342,15 +350,6 @@ let trees = [
 
 let shots = [];
 
-document.addEventListener("keydown", (event) => player1.handleInput(event, true));
-
-document.addEventListener("keyup", (event) => player1.handleInput(event, false));
-
-
-document.addEventListener("keydown", (event) => player2.handleInput(event, true));
-
-document.addEventListener("keyup", (event) => player2.handleInput(event, false));
-
 function detectCollison(x1, y1, x2, y2) {
 
     let xDistance = x2 - x1;
@@ -402,10 +401,8 @@ function gamePlay() {
 
     let adjustHurtP1 = "." + player1.playerImage.src.replace(/^.*(?=\/assets)/, "");
     let adjustHurtP2 = "." + player2.playerImage.src.replace(/^.*(?=\/assets)/, "");
-
-    DeclareWinner()
-    let playerTwoOnHurt = adjustHurtP2 == assets.sprites2[4].src
-    let playerOneOnHurt = adjustHurtP1 == assets.sprites[4].src
+    let playerTwoOnHurt = adjustHurtP2.includes("Hurt")
+    let playerOneOnHurt = adjustHurtP1.includes("Hurt")
 
 
     cleaner(context, canvas);
@@ -615,33 +612,66 @@ function drawLoadingScreen() {
     function draw() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Background (optional)
-        context.fillStyle = "#f0f0f0";
+        context.fillStyle = "#222222";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw loading text
-        context.fillStyle = "black";
-        context.font = "48px Arial";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText("Loading...", centerX, centerY);
+        context.font = "48px 'Press Start 2P', serif";
+        context.fillStyle = "#FFFFFF";
+        context.textAlign = "center"; context.textBaseline = "middle";
+        context.fillText("Loading . . . ", canvas.width / 2, canvas.height / 2);
     }
 
     draw();
 }
 
+let gradientOffset = 0;
 
 function drawStartImage() {
-    if (loadedAssets.images.start) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the start.png at the center of the canvas
-        const img = loadedAssets.images.start;
-        const imgX = (canvas.width - img.width) / 2;
-        const imgY = (canvas.height - img.height) / 2;
+    context.fillStyle = "#222222";
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
-        context.drawImage(img, imgX, imgY);
+    context.font = "48px 'Press Start 2P', serif";
+    context.fillStyle = "#FFFFFF";
+    context.textAlign = "center"; context.textBaseline = "middle";
+    context.fillText("Press Enter to Start", canvas.width / 2, canvas.height / 2);
+
+    const gradient1 = context.createLinearGradient(0, 0, canvas.width, 0);
+
+    // Adjust brightness dynamically for animation
+    const color1 = adjustColorBrightness("#8a73c0", Math.sin(gradientOffset * 0.1) * 10);
+    const color2 = adjustColorBrightness("#b05ca3", Math.cos(gradientOffset * 0.1) * 10);
+
+    gradient1.addColorStop(0, color1); // First gradient color
+    gradient1.addColorStop(1, color2); // Second gradient color
+
+    const borderX = 0;
+    const borderY = 0;
+    context.strokeStyle = gradient1;
+    context.lineWidth = 25;
+    context.strokeRect(borderX, borderY, canvas.width, canvas.height);
+    gradientOffset += .005; // Increment the offset for animation
+
+    // Request the next frame for animation
+    if (!startScreen) {
+        requestAnimationFrame(drawStartImage);
+
     }
+
+}
+
+// Helper function to adjust color brightness
+function adjustColorBrightness(hex, percent) {
+    let r = parseInt(hex.slice(1, 3), 16);
+    let g = parseInt(hex.slice(3, 5), 16);
+    let b = parseInt(hex.slice(5, 7), 16);
+
+    r = Math.min(255, Math.max(0, r + percent));
+    g = Math.min(255, Math.max(0, g + percent));
+    b = Math.min(255, Math.max(0, b + percent));
+
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 
@@ -650,34 +680,111 @@ let secondStart = 70;
 let flag = 0; // Initialize flag to control the movement (0-1-2)
 let secondFlag = 0; // Second player flag
 
+let isAnimatingBorders = false; // State to control border animation
+
 function drawPickScreen() {
     if (loadedAssets.images.pick) {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the start.png at the center of the canvas
+        // Draw the background image
         const img = loadedAssets.images.pick;
-        const imgX = (canvas.width - img.width);
-        const imgY = (canvas.height - img.height);
-
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        let currentFrameP1 = 0;
+        let gameFrame = 0;
+        let currentFrameP2 = 0;
 
-        // Calculate border position for player 1 based on 'start'
-        const borderX = (canvas.width) / 2.8; // Centered horizontally for player 1
-        const borderY = start; // Initial position starts at 70 for player 1
+        function drawBorders() {
+            if (!isAnimatingBorders) return; // Stop animation if state is false
 
-        // Draw the red border (Player 1)
-        context.strokeStyle = "red";
-        context.lineWidth = 15;
-        context.strokeRect(borderX, borderY, 100, 140);
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        // Calculate border position for player 2 based on 'secondStart'
-        const secondBorderX = (canvas.width) / 2.12; // Centered horizontally for player 2
-        const secondBorderY = secondStart; // Initial position starts at 70 for player 2
+            // Gradient for Player 1
+            const gradient1 = context.createLinearGradient(0, 0, canvas.width, 0);
+            gradient1.addColorStop(0, `hsl(${(gradientOffset % 360)}, 100%, 50%)`);
+            gradient1.addColorStop(1, `hsl(${((gradientOffset + 180) % 360)}, 100%, 50%)`);
 
-        // Draw the blue border (Player 2)
-        context.strokeStyle = "blue";
-        context.lineWidth = 15;
-        context.strokeRect(secondBorderX, secondBorderY, 100, 140);
+            const borderX = canvas.width / 2.8;
+            const borderY = start;
+            context.strokeStyle = gradient1;
+            context.lineWidth = 15;
+            context.strokeRect(borderX, borderY, 135, 140);
+
+            // Gradient for Player 2
+            const gradient2 = context.createLinearGradient(canvas.width, 0, 0, canvas.height);
+            gradient2.addColorStop(0, `hsl(${((gradientOffset + 90) % 360)}, 100%, 50%)`);
+            gradient2.addColorStop(1, `hsl(${((gradientOffset + 270) % 360)}, 100%, 50%)`);
+
+            const secondBorderX = canvas.width / 1.97;
+            const secondBorderY = secondStart;
+            context.strokeStyle = gradient2;
+            context.lineWidth = 15;
+            context.strokeRect(secondBorderX, secondBorderY, 135, 140);
+
+            gradientOffset += 2;
+            if (!pickScreen) {
+                requestAnimationFrame(drawBorders);
+
+            }
+            let frameWidthPlayer1 = settingsCountP1[0];
+            let frameHeightPlayer1 = settingsCountP1[0];
+            let staggerFrames = 10;
+            let p1Image = new Image();
+            p1Image.src = allPlayersP1[flag][0].src
+            const frameXP1 = currentFrameP1 * frameWidthPlayer1;
+            context.drawImage(
+                p1Image,
+                frameXP1,
+                0,
+                settingsCountP1[0],
+                settingsCountP1[0],
+                0,
+                110,
+                400,
+                400
+            );
+            // player 2 
+            let frameWidthPlayer2 = settingsCountP2[0];
+            let frameHeightPlayer2 = settingsCountP2[0];
+            let p2Image = new Image();
+            p2Image.src = allPlayersP2[secondFlag][0].src
+            const frameXP2 = currentFrameP2 * frameWidthPlayer2;
+
+
+            context.drawImage(
+                p2Image,
+                frameXP2,
+                0,
+                settingsCountP2[0],
+                settingsCountP2[0],
+                canvas.width - 500,
+                110,
+                400,
+                400
+            );
+
+            if (gameFrame % staggerFrames === 0) {
+                currentFrameP1++;
+                currentFrameP2++
+
+                if (currentFrameP1 >= allPlayersP1[flag][0].frameCount) {
+                    currentFrameP1 = 0;
+                }
+                if (currentFrameP2 >= allPlayersP2[secondFlag][0].frameCount) {
+                    currentFrameP2 = 0;
+                }
+
+            }
+            gameFrame++;
+
+
+
+        }
+
+        if (!isAnimatingBorders) {
+            isAnimatingBorders = true; // Start animation only if not already animating
+            drawBorders();
+        }
     }
 }
 
@@ -685,12 +792,15 @@ let startScreen = false;
 let pickScreen = false;
 
 function animate() {
-
     if (assetsLoaded) {
-
         if (!startScreen) {
-            drawStartImage(); // Draw the start screen
+            drawStartImage();
         } else if (!pickScreen) {
+            if (!isAnimatingBorders) {
+
+                drawPickScreen(); // Start pick screen animation
+            }
+
             player1.sprites = allPlayersP1[flag]
             player2.sprites = allPlayersP2[secondFlag]
             settingsCountP1 = playerOneSettings[flag]
@@ -709,21 +819,29 @@ function animate() {
             player2.frameWidth = settingsCountP2[1]
             player2.shotHeight = settingsCountP2[2]
             player2.shotFrameCount = settingsCountP2[3]
-
-
-
-            drawPickScreen();
-
         } else {
+            isAnimatingBorders = false; // Stop pick screen animation
 
-            gamePlay(); // Start the gameplay
+            document.addEventListener("keydown", (event) => player1.handleInput(event, true));
+
+            document.addEventListener("keyup", (event) => player1.handleInput(event, false));
+
+
+            document.addEventListener("keydown", (event) => player2.handleInput(event, true));
+
+            document.addEventListener("keyup", (event) => player2.handleInput(event, false));
+            gamePlay();
+
+
         }
     } else {
-        drawLoadingScreen("gameCanvas"); // Display loading screen while assets load
+        drawLoadingScreen("gameCanvas");
     }
 
     requestAnimationFrame(animate);
 }
+
+
 
 // Event listener to handle transitions
 document.addEventListener("keyup", (e) => {
@@ -755,7 +873,6 @@ document.addEventListener('keydown', (event) => {
 
 
 
-    drawPickScreen(); // Redraw the screen after updating positions
 });
 
 

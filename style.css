@@ -72,6 +72,5 @@ div.timer {
     border: 3px solid white;
 }
 body{
-    background-image: url("./assets/1/start.png");
     background-size: cover;
 }

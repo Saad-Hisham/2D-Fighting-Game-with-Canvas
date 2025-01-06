@@ -156,13 +156,6 @@ export default class Player {
         const centerY = this.y - this.height / 2; // Center Y of the player
         const radius = Math.min(this.width, this.height) / 6; // Radius for tight fit
 
-        // context.beginPath();
-        // context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        // context.strokeStyle = "red";
-        // context.lineWidth = 2;
-        // context.stroke();
-
-        // Draw and animate shots
     }
 
     handleInput(event, isKeyDown) {
@@ -373,11 +366,9 @@ export default class Player {
         }
 
         this.isattacking = true;
-
         this.state = "attacking";
-        this.shots.push({ x: this.x, y: this.y })
-
         this.applySetting(this.sprites[6]);
+        this.shots.push({ x: this.x+this.width/2, y: this.y })
         this.playSound(this.throwSound)
         this.keys.ranged = false;
     }
@@ -524,14 +515,17 @@ export default class Player {
     }
     resetAttack() {
         if (this.isattacking) {
+                console.log(this.frameCount)
 
-            if (this.currentFrame >= this.sprites[2].frameCount - 1) {
+            if (this.currentFrame >= this.frameCount - 1) {
 
                 if (this.keys.right || this.keys.left) {
 
                     this.applySetting(this.sprites[1]);
 
                 } else {
+                console.log(this.currentFrame)
+
                     this.applySetting(this.sprites[0]);
 
                 }
@@ -539,7 +533,7 @@ export default class Player {
             }
         }
 
-        if (this.state === "jumping" && this.isattacking && this.currentFrame >= 4) {
+        if (this.state === "jumping" && this.isattacking && this.currentFrame >= this.frameCount) {
 
             this.applySetting(this.sprites[0]);
 
@@ -581,7 +575,7 @@ export default class Player {
             this.jumping();
         }
 
-        if (this.state === "attacking" && this.currentFrame >= this.sprites[5].frameCount - 1) {
+        if (this.state === "attacking" && this.currentFrame >= this.frameCount - 1) {
 
             this.state = "idle";
 
